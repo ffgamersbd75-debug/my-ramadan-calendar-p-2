@@ -43,7 +43,7 @@
 
     <div class="time-row">
         <div class="time-card">
-            <div class="time-label">সাহরীর শেষ</div>
+            <div class="time-label">সাহরীর শেষ সময়</div> 
             <div class="time-value" id="sahriTime">--:--</div>
         </div>
         <div class="time-card">
@@ -179,46 +179,56 @@
         var sahriStr = addMins(data.s, dist.s);
         var iftarStr = addMins(data.i, dist.i);
 
-        var dateParts = data.d.split('-');
-        var monthName = data.d.indexOf("-02-") !== -1 ? " ফেব্রুয়ারি" : " মার্চ";
-        document.getElementById('displayDate').innerText = toBangla(dateParts[2]) + monthName;
-        document.getElementById('ramadanNo').innerText = toBangla(idx + 1) + " রমজান";
-        document.getElementById('districtTitle').innerText = "🌙 " + currentDist + " জেলা";
-        document.getElementById('sahriTime').innerText = toBangla(sahriStr);
-        
-        var iftarParts = iftarStr.split(':');
-        var ih = parseInt(iftarParts[0], 10);
-        var im = parseInt(iftarParts[1], 10);
-        var displayIh = ih > 12 ? ih - 12 : ih;
-        document.getElementById('iftarTime').innerText = toBangla(displayIh + ":" + padZero(im));
-
         var currentSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
-        var sParts = sahriStr.split(':');
-        var sahriSec = (parseInt(sParts[0], 10) * 3600) + (parseInt(sParts[1], 10) * 60);
         var iParts = iftarStr.split(':');
         var iftarSec = (parseInt(iParts[0], 10) * 3600) + (parseInt(iParts[1], 10) * 60);
 
+        // ইফতারের সময় পার হয়ে গেলে পরবর্তী দিনের ডাটা দেখানোর লজিক
+        var activeIdx = idx;
+        var isNextDay = false;
+        
+        if (currentSec >= iftarSec) {
+            if (idx + 1 < ramadanSchedule.length) {
+                activeIdx = idx + 1;
+                isNextDay = true;
+            }
+        }
+
+        // ডিসপ্লেতে দেখানোর জন্য অ্যাকটিভ ডাটা (আজকের অথবা আগামীকালের)
+        var displayData = ramadanSchedule[activeIdx];
+        var displaySahriStr = addMins(displayData.s, dist.s);
+        var displayIftarStr = addMins(displayData.i, dist.i);
+
+        var dateParts = displayData.d.split('-');
+        var monthName = displayData.d.indexOf("-02-") !== -1 ? " ফেব্রুয়ারি" : " মার্চ";
+        document.getElementById('displayDate').innerText = toBangla(dateParts[2]) + monthName;
+        document.getElementById('ramadanNo').innerText = toBangla(activeIdx + 1) + " রমজান";
+        document.getElementById('districtTitle').innerText = "🌙 " + currentDist + " জেলা";
+        document.getElementById('sahriTime').innerText = toBangla(displaySahriStr);
+        
+        var dIftarParts = displayIftarStr.split(':');
+        var ih = parseInt(dIftarParts[0], 10);
+        var im = parseInt(dIftarParts[1], 10);
+        var displayIh = ih > 12 ? ih - 12 : ih;
+        document.getElementById('iftarTime').innerText = toBangla(displayIh + ":" + padZero(im));
+
+        // টাইমার ক্যালকুলেশন
+        var sParts = displaySahriStr.split(':');
+        var sahriSec = (parseInt(sParts[0], 10) * 3600) + (parseInt(sParts[1], 10) * 60);
         var diff = 0;
         var msg = "";
-        
-        if (currentSec < sahriSec) {
-            diff = sahriSec - currentSec; 
-            msg = "সাহরীর শেষ সময়ের বাকি";
-        } else if (currentSec < iftarSec) {
-            diff = iftarSec - currentSec; 
-            msg = "ইফতারের বাকি";
-        } else {
-            if (idx + 1 < ramadanSchedule.length) {
-                var nextData = ramadanSchedule[idx + 1];
-                var nSahri = addMins(nextData.s, dist.s);
-                var nsParts = nSahri.split(':');
-                var nSahriSec = (parseInt(nsParts[0], 10) * 3600) + (parseInt(nsParts[1], 10) * 60);
-                diff = (86400 - currentSec) + nSahriSec;
-                msg = "আগামীকাল সাহরীর বাকি";
-            } else { 
-                diff = 0; 
-                msg = "মাহে রমজান সমাপ্ত"; 
+
+        if (!isNextDay) {
+            if (currentSec < sahriSec) {
+                diff = sahriSec - currentSec; 
+                msg = "সাহরীর শেষ সময়ের বাকি";
+            } else {
+                diff = iftarSec - currentSec; 
+                msg = "ইফতারের বাকি";
             }
+        } else {
+            diff = (86400 - currentSec) + sahriSec;
+            msg = "পরবর্তী সাহরীর বাকি";
         }
 
         document.getElementById('statusMsg').innerText = msg;
