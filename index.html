@@ -19,13 +19,12 @@
         .time-value { font-size: 2rem; font-weight: 700; color: #15803d; }
         .countdown { background: #166534; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
         .message { font-size: 1.1rem; margin-bottom: 8px; opacity: 0.9; }
-        .countdown-timer { font-size: 2.6rem; font-weight: 700; font-family: monospace; letter-spacing: 1px; }
+        .countdown-timer { font-size: 2.6rem; font-weight: 700; font-family: monospace; }
         
-        /* সংগঠনের নাম মাঝখানে রাখার জন্য ফিক্সড কোড */
+        /* সংগঠনের নাম মাঝখানে রাখার ফিক্সড ডিজাইন */
         .logo-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; }
         .association-logo { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #16a34a; margin-bottom: 10px; object-fit: cover; }
         .association-name { font-size: 1.25rem; color: #166534; font-weight: 700; line-height: 1.4; width: 100%; text-align: center; display: block; }
-        footer { font-size: 0.8rem; color: #666; margin-top: 15px; text-align: center; }
     </style>
 </head>
 <body>
@@ -63,20 +62,32 @@
         <img src="logo.jpg.png" alt="Logo" class="association-logo">
         <div class="association-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস অ্যাসোসিয়েশন, বরিশাল</div>
     </div>
-    <footer>সোর্স: ইসলামিক ফাউন্ডেশন</footer>
 </div>
 
 <script>
-    // ৬৪ জেলার ডাটাবেজ
+    // ঢাকা ভিত্তিক মূল সময়সূচী ২০২৬
+    const ramadanSchedule = [
+        { d: "2026-02-19", s: "05:07", i: "17:56" }, { d: "2026-02-20", s: "05:06", i: "17:57" },
+        { d: "2026-02-21", s: "05:05", i: "17:57" }, { d: "2026-02-22", s: "05:04", i: "17:58" },
+        { d: "2026-02-23", s: "05:03", i: "17:58" }, { d: "2026-02-24", s: "05:02", i: "17:59" },
+        { d: "2026-02-25", s: "05:02", i: "17:59" }, { d: "2026-02-26", s: "05:01", i: "18:00" },
+        { d: "2026-02-27", s: "05:00", i: "18:00" }, { d: "2026-02-28", s: "04:59", i: "18:01" },
+        { d: "2026-03-01", s: "04:58", i: "18:01" }, { d: "2026-03-02", s: "04:57", i: "18:02" },
+        { d: "2026-03-03", s: "04:56", i: "18:02" }, { d: "2026-03-04", s: "04:55", i: "18:03" },
+        { d: "2026-03-05", s: "04:54", i: "18:03" }, { d: "2026-03-06", s: "04:53", i: "18:04" },
+        { d: "2026-03-07", s: "04:52", i: "18:04" }, { d: "2026-03-08", s: "04:51", i: "18:05" },
+        { d: "2026-03-09", s: "04:50", i: "18:05" }, { d: "2026-03-10", s: "04:49", i: "18:06" }
+    ];
+
     const districtData = [
         { n: "পটুয়াখালী", s: 4, i: 3 }, { n: "বরিশাল", s: 3, i: 2 }, { n: "ঢাকা", s: 0, i: 0 },
-        { n: "বরগুনা", s: 5, i: 4 }, { n: "পিরোজপুর", s: 4, i: 3 }, { n: "ঝালকাঠি", s: 3, i: 2 },
-        { n: "ভোলা", s: 2, i: 0 }, { n: "চট্টগ্রাম", s: -5, i: -9 }, { n: "রাজশাহী", s: 7, i: 6 },
+        { n: "ভোলা", s: 2, i: 0 }, { n: "পিরোজপুর", s: 4, i: 3 }, { n: "বরগুনা", s: 5, i: 4 },
+        { n: "ঝালকাঠি", s: 3, i: 2 }, { n: "চট্টগ্রাম", s: -5, i: -9 }, { n: "রাজশাহী", s: 7, i: 6 },
         { n: "সিলেট", s: -7, i: -10 }, { n: "খুলনা", s: 5, i: 4 }, { n: "রংপুর", s: 3, i: 1 },
-        { n: "ময়মনসিংহ", s: 0, i: -1 }, { n: "গাজীপুর", s: 0, i: 0 }, { n: "মানিকগঞ্জ", s: 1, i: 2 },
-        { n: "মুন্সীগঞ্জ", s: 0, i: 1 }, { n: "নারায়ণগঞ্জ", s: -1, i: 0 }, { n: "নরসিংদী", s: -2, i: -1 },
-        { n: "টাঙ্গাইল", s: 2, i: 1 }, { n: "ফরিদপুর", s: 2, i: 3 }, { n: "গোপালগঞ্জ", s: 3, i: 3 },
-        { n: "মাদারীপুর", s: 2, i: 2 }, { n: "রাজবাড়ী", s: 2, i: 3 }, { n: "শরীয়তপুর", s: 1, i: 1 },
+        { n: "গাজীপুর", s: 0, i: 0 }, { n: "মানিকগঞ্জ", s: 1, i: 2 }, { n: "মুন্সীগঞ্জ", s: 0, i: 1 },
+        { n: "নারায়ণগঞ্জ", s: -1, i: 0 }, { n: "নরসিংদী", s: -2, i: -1 }, { n: "টাঙ্গাইল", s: 2, i: 1 },
+        { n: "ফরিদপুর", s: 2, i: 3 }, { n: "গোপালগঞ্জ", s: 3, i: 3 }, { n: "মাদারীপুর", s: 2, i: 2 },
+        { n: "রাজবাড়ী", s: 2, i: 3 }, { n: "শরীয়তপুর", s: 1, i: 1 }, { n: "ময়মনসিংহ", s: 0, i: -1 },
         { n: "জামালপুর", s: 3, i: 0 }, { n: "নেত্রকোনা", s: -1, i: -3 }, { n: "শেরপুর", s: 2, i: -1 },
         { n: "কক্সবাজার", s: -5, i: -10 }, { n: "ব্রাহ্মণবাড়িয়া", s: -3, i: -3 }, { n: "চাঁদপুর", s: 0, i: -1 },
         { n: "কুমিল্লা", s: -2, i: -3 }, { n: "লক্ষ্মীপুর", s: 1, i: -1 }, { n: "নোয়াখালী", s: 0, i: -2 },
@@ -90,25 +101,6 @@
         { n: "ঝিনাইদহ", s: 6, i: 5 }, { n: "কুষ্টিয়া", s: 5, i: 5 }, { n: "মাগুরা", s: 4, i: 4 },
         { n: "মেহেরপুর", s: 8, i: 7 }, { n: "নড়াইল", s: 5, i: 4 }, { n: "সাতক্ষীরা", s: 7, i: 5 },
         { n: "হবিগঞ্জ", s: -5, i: -7 }, { n: "মৌলভীবাজার", s: -6, i: -9 }, { n: "সুনামগঞ্জ", s: -5, i: -7 }
-    ];
-
-    // ঢাকা ভিত্তিক রমজান ২০২৬ পূর্ণাঙ্গ তালিকা
-    const ramadanSchedule = [
-        { d: "2026-02-19", s: "05:07", i: "17:56" }, { d: "2026-02-20", s: "05:06", i: "17:57" },
-        { d: "2026-02-21", s: "05:05", i: "17:57" }, { d: "2026-02-22", s: "05:04", i: "17:58" },
-        { d: "2026-02-23", s: "05:03", i: "17:58" }, { d: "2026-02-24", s: "05:02", i: "17:59" },
-        { d: "2026-02-25", s: "05:02", i: "17:59" }, { d: "2026-02-26", s: "05:01", i: "18:00" },
-        { d: "2026-02-27", s: "05:00", i: "18:00" }, { d: "2026-02-28", s: "04:59", i: "18:01" },
-        { d: "2026-03-01", s: "04:58", i: "18:01" }, { d: "2026-03-02", s: "04:57", i: "18:02" },
-        { d: "2026-03-03", s: "04:56", i: "18:02" }, { d: "2026-03-04", s: "04:55", i: "18:03" },
-        { d: "2026-03-05", s: "04:54", i: "18:03" }, { d: "2026-03-06", s: "04:53", i: "18:04" },
-        { d: "2026-03-07", s: "04:52", i: "18:04" }, { d: "2026-03-08", s: "04:51", i: "18:05" },
-        { d: "2026-03-09", s: "04:50", i: "18:05" }, { d: "2026-03-10", s: "04:49", i: "18:06" },
-        { d: "2026-03-11", s: "04:48", i: "18:06" }, { d: "2026-03-12", s: "04:47", i: "18:07" },
-        { d: "2026-03-13", s: "04:46", i: "18:07" }, { d: "2026-03-14", s: "04:45", i: "18:08" },
-        { d: "2026-03-15", s: "04:44", i: "18:08" }, { d: "2026-03-16", s: "04:43", i: "18:09" },
-        { d: "2026-03-17", s: "04:42", i: "18:09" }, { d: "2026-03-18", s: "04:41", i: "18:10" },
-        { d: "2026-03-19", s: "04:40", i: "18:10" }, { d: "2026-03-20", s: "04:39", i: "18:11" }
     ];
 
     function toBangla(n) { return n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]); }
@@ -129,89 +121,73 @@
         update();
     }
 
-    function timeToSeconds(timeStr) {
+    function addMins(timeStr, mins) {
         let [h, m] = timeStr.split(':').map(Number);
-        return (h * 3600) + (m * 60);
-    }
-
-    function addMinutes(timeStr, mins) {
-        let totalSec = timeToSeconds(timeStr) + (mins * 60);
-        let h = Math.floor(totalSec / 3600);
-        let m = Math.floor((totalSec % 3600) / 60);
+        m += mins;
+        while(m >= 60) { h++; m -= 60; }
+        while(m < 0) { h--; m += 60; }
         return String(h).padStart(2, '0') + ":" + String(m).padStart(2, '0');
     }
 
     function update() {
         const now = new Date();
         const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth()+1).padStart(2,'0');
+        const day = String(now.getDate()).padStart(2,'0');
         const todayStr = ${year}-${month}-${day};
         
         const dist = districtData.find(d => d.n === currentDist);
         let idx = ramadanSchedule.findIndex(item => item.d === todayStr);
 
-        // রমজানের আগের বা পরের সময়ের ফলব্যাক
         if (idx === -1) {
             if (todayStr < ramadanSchedule[0].d) idx = 0;
             else { 
                 document.getElementById('ramadanNo').innerText = "ঈদ মোবারক";
-                document.getElementById('statusMsg').innerText = "মাহে রমজান সমাপ্ত।";
+                document.getElementById('statusMsg').innerText = "রমজান সমাপ্ত।";
                 return;
             }
         }
 
         const data = ramadanSchedule[idx];
-        const sahriStr = addMinutes(data.s, dist.s);
-        const iftarStr = addMinutes(data.i, dist.i);
+        const sahriStr = addMins(data.s, dist.s);
+        const iftarStr = addMins(data.i, dist.i);
 
-        // ডিসপ্লে আপডেট
         document.getElementById('displayDate').innerText = toBangla(data.d.split('-')[2]) + (data.d.includes('-02-') ? " ফেব্রুয়ারি" : " মার্চ");
         document.getElementById('ramadanNo').innerText = toBangla(idx + 1) + " রমজান";
-        document.getElementById('districtTitle').innerText = currentDist + " জেলা";
+        document.getElementById('districtTitle').innerText = "🌙 " + currentDist + " জেলা";
         document.getElementById('sahriTime').innerText = toBangla(sahriStr);
         
-        // ইফতার ১২ ঘণ্টা ফরম্যাট
         let [ih, im] = iftarStr.split(':').map(Number);
         document.getElementById('iftarTime').innerText = toBangla((ih > 12 ? ih - 12 : ih) + ":" + String(im).padStart(2, '0'));
 
-        // সেকেন্ড ভিত্তিক নির্ভুল কাউন্টডাউন (Date Object ছাড়া)
-        const currentTotalSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
-        const sahriTotalSec = timeToSeconds(sahriStr);
-        const iftarTotalSec = timeToSeconds(iftarStr);
+        const currentSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        const sahriSec = (parseInt(sahriStr.split(':')[0]) * 3600) + (parseInt(sahriStr.split(':')[1]) * 60);
+        const iftarSec = (parseInt(iftarStr.split(':')[0]) * 3600) + (parseInt(iftarStr.split(':')[1]) * 60);
 
-        let targetSec, msg;
-        if (currentTotalSec < sahriTotalSec) {
-            targetSec = sahriTotalSec - currentTotalSec;
-            msg = "সাহরীর শেষ সময়ের বাকি";
-        } else if (currentTotalSec < iftarTotalSec) {
-            targetSec = iftarTotalSec - currentTotalSec;
-            msg = "ইফতারের বাকি";
+        let diff, msg;
+        if (currentSec < sahriSec) {
+            diff = sahriSec - currentSec; msg = "সাহরীর শেষ সময়ের বাকি";
+        } else if (currentSec < iftarSec) {
+            diff = iftarSec - currentSec; msg = "ইফতারের বাকি";
         } else {
-            // পরবর্তী দিনের সাহরী হিসেব করো
             if (idx + 1 < ramadanSchedule.length) {
                 const nextData = ramadanSchedule[idx + 1];
-                const nextSahriStr = addMinutes(nextData.s, dist.s);
-                targetSec = (86400 - currentTotalSec) + timeToSeconds(nextSahriStr);
+                const nSahri = addMins(nextData.s, dist.s);
+                diff = (86400 - currentSec) + (parseInt(nSahri.split(':')[0]) * 3600) + (parseInt(nSahri.split(':')[1]) * 60);
                 msg = "আগামীকাল সাহরীর বাকি";
-            } else {
-                targetSec = 0; msg = "পরবর্তী সময়ের অপেক্ষা...";
-            }
+            } else { diff = 0; msg = "মাহে রমজান সমাপ্ত"; }
         }
 
         document.getElementById('statusMsg').innerText = msg;
-        if (targetSec > 0) {
-            let h = Math.floor(targetSec / 3600);
-            let m = Math.floor((targetSec % 3600) / 60);
-            let s = targetSec % 60;
+        if (diff > 0) {
+            let h = Math.floor(diff / 3600);
+            let m = Math.floor((diff % 3600) / 60);
+            let s = diff % 60;
             document.getElementById('timer').innerText = toBangla(String(h).padStart(2,'0')+":"+String(m).padStart(2,'0')+":"+String(s).padStart(2,'0'));
-        } else {
-            document.getElementById('timer').innerText = toBangla("০০:০০:০০");
-        }
+        } else { document.getElementById('timer').innerText = toBangla("০০:০০:০০"); }
     }
 
-    setInterval(update, 1000);
-    update();
+    setInterval(update, 1000); update();
 </script>
 </body>
 </html>
