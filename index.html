@@ -19,12 +19,11 @@
         .time-value { font-size: 2rem; font-weight: 700; color: #15803d; }
         .countdown { background: #166534; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
         .message { font-size: 1.1rem; margin-bottom: 8px; opacity: 0.9; }
-        .countdown-timer { font-size: 2.6rem; font-weight: 700; font-family: monospace; }
-        
-        /* সংগঠনের নাম মাঝখানে রাখার ফিক্সড ডিজাইন */
+        .countdown-timer { font-size: 2.6rem; font-weight: 700; font-family: monospace; letter-spacing: 1px; }
         .logo-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; }
         .association-logo { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #16a34a; margin-bottom: 10px; object-fit: cover; }
         .association-name { font-size: 1.25rem; color: #166534; font-weight: 700; line-height: 1.4; width: 100%; text-align: center; display: block; }
+        footer { font-size: 0.8rem; color: #666; margin-top: 15px; text-align: center; }
     </style>
 </head>
 <body>
@@ -62,11 +61,11 @@
         <img src="logo.jpg.png" alt="Logo" class="association-logo">
         <div class="association-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস অ্যাসোসিয়েশন, বরিশাল</div>
     </div>
+    <footer>সোর্স: ইসলামিক ফাউন্ডেশন</footer>
 </div>
 
 <script>
-    // ঢাকা ভিত্তিক মূল সময়সূচী ২০২৬
-    const ramadanSchedule = [
+    var ramadanSchedule = [
         { d: "2026-02-19", s: "05:07", i: "17:56" }, { d: "2026-02-20", s: "05:06", i: "17:57" },
         { d: "2026-02-21", s: "05:05", i: "17:57" }, { d: "2026-02-22", s: "05:04", i: "17:58" },
         { d: "2026-02-23", s: "05:03", i: "17:58" }, { d: "2026-02-24", s: "05:02", i: "17:59" },
@@ -79,7 +78,7 @@
         { d: "2026-03-09", s: "04:50", i: "18:05" }, { d: "2026-03-10", s: "04:49", i: "18:06" }
     ];
 
-    const districtData = [
+    var districtData = [
         { n: "পটুয়াখালী", s: 4, i: 3 }, { n: "বরিশাল", s: 3, i: 2 }, { n: "ঢাকা", s: 0, i: 0 },
         { n: "ভোলা", s: 2, i: 0 }, { n: "পিরোজপুর", s: 4, i: 3 }, { n: "বরগুনা", s: 5, i: 4 },
         { n: "ঝালকাঠি", s: 3, i: 2 }, { n: "চট্টগ্রাম", s: -5, i: -9 }, { n: "রাজশাহী", s: 7, i: 6 },
@@ -103,91 +102,138 @@
         { n: "হবিগঞ্জ", s: -5, i: -7 }, { n: "মৌলভীবাজার", s: -6, i: -9 }, { n: "সুনামগঞ্জ", s: -5, i: -7 }
     ];
 
-    function toBangla(n) { return n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]); }
+    function toBangla(n) {
+        var engStr = n.toString();
+        var bnDigits = "০১২৩৪৫৬৭৮৯";
+        var bnStr = "";
+        for(var i=0; i<engStr.length; i++) {
+            var ch = engStr.charAt(i);
+            if(ch >= '0' && ch <= '9') { bnStr += bnDigits[parseInt(ch, 10)]; } 
+            else { bnStr += ch; }
+        }
+        return bnStr;
+    }
 
-    const select = document.getElementById('districtSelect');
-    districtData.sort((a,b)=>a.n.localeCompare(b.n, 'bn')).forEach(d => {
-        let opt = document.createElement('option');
-        opt.value = d.n; opt.innerText = d.n;
+    function padZero(num) {
+        return num < 10 ? "0" + num : num;
+    }
+
+    var select = document.getElementById('districtSelect');
+    for(var i=0; i<districtData.length; i++) {
+        var opt = document.createElement('option');
+        opt.value = districtData[i].n;
+        opt.innerText = districtData[i].n;
         select.appendChild(opt);
-    });
+    }
 
-    let currentDist = localStorage.getItem('userDistrict') || "পটুয়াখালী";
+    var currentDist = "পটুয়াখালী";
+    try {
+        if(localStorage.getItem('userDistrict')) { currentDist = localStorage.getItem('userDistrict'); }
+    } catch(e) {}
     select.value = currentDist;
 
     function changeDistrict() {
         currentDist = select.value;
-        localStorage.setItem('userDistrict', currentDist);
+        try { localStorage.setItem('userDistrict', currentDist); } catch(e) {}
         update();
     }
 
     function addMins(timeStr, mins) {
-        let [h, m] = timeStr.split(':').map(Number);
+        var parts = timeStr.split(':');
+        var h = parseInt(parts[0], 10);
+        var m = parseInt(parts[1], 10);
         m += mins;
         while(m >= 60) { h++; m -= 60; }
         while(m < 0) { h--; m += 60; }
-        return String(h).padStart(2, '0') + ":" + String(m).padStart(2, '0');
+        return padZero(h) + ":" + padZero(m);
     }
 
     function update() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth()+1).padStart(2,'0');
-        const day = String(now.getDate()).padStart(2,'0');
-        const todayStr = ${year}-${month}-${day};
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = padZero(now.getMonth() + 1);
+        var day = padZero(now.getDate());
+        var todayStr = year + "-" + month + "-" + day;
         
-        const dist = districtData.find(d => d.n === currentDist);
-        let idx = ramadanSchedule.findIndex(item => item.d === todayStr);
+        var dist = districtData[0];
+        for(var i=0; i<districtData.length; i++) {
+            if(districtData[i].n === currentDist) { dist = districtData[i]; break; }
+        }
+
+        var idx = -1;
+        for(var j=0; j<ramadanSchedule.length; j++) {
+            if(ramadanSchedule[j].d === todayStr) { idx = j; break; }
+        }
 
         if (idx === -1) {
-            if (todayStr < ramadanSchedule[0].d) idx = 0;
+            if (todayStr < ramadanSchedule[0].d) { idx = 0; }
             else { 
                 document.getElementById('ramadanNo').innerText = "ঈদ মোবারক";
                 document.getElementById('statusMsg').innerText = "রমজান সমাপ্ত।";
+                document.getElementById('timer').innerText = "০০:০০:০০";
                 return;
             }
         }
 
-        const data = ramadanSchedule[idx];
-        const sahriStr = addMins(data.s, dist.s);
-        const iftarStr = addMins(data.i, dist.i);
+        var data = ramadanSchedule[idx];
+        var sahriStr = addMins(data.s, dist.s);
+        var iftarStr = addMins(data.i, dist.i);
 
-        document.getElementById('displayDate').innerText = toBangla(data.d.split('-')[2]) + (data.d.includes('-02-') ? " ফেব্রুয়ারি" : " মার্চ");
+        var dateParts = data.d.split('-');
+        var monthName = data.d.indexOf("-02-") !== -1 ? " ফেব্রুয়ারি" : " মার্চ";
+        document.getElementById('displayDate').innerText = toBangla(dateParts[2]) + monthName;
         document.getElementById('ramadanNo').innerText = toBangla(idx + 1) + " রমজান";
         document.getElementById('districtTitle').innerText = "🌙 " + currentDist + " জেলা";
         document.getElementById('sahriTime').innerText = toBangla(sahriStr);
         
-        let [ih, im] = iftarStr.split(':').map(Number);
-        document.getElementById('iftarTime').innerText = toBangla((ih > 12 ? ih - 12 : ih) + ":" + String(im).padStart(2, '0'));
+        var iftarParts = iftarStr.split(':');
+        var ih = parseInt(iftarParts[0], 10);
+        var im = parseInt(iftarParts[1], 10);
+        var displayIh = ih > 12 ? ih - 12 : ih;
+        document.getElementById('iftarTime').innerText = toBangla(displayIh + ":" + padZero(im));
 
-        const currentSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
-        const sahriSec = (parseInt(sahriStr.split(':')[0]) * 3600) + (parseInt(sahriStr.split(':')[1]) * 60);
-        const iftarSec = (parseInt(iftarStr.split(':')[0]) * 3600) + (parseInt(iftarStr.split(':')[1]) * 60);
+        var currentSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        var sParts = sahriStr.split(':');
+        var sahriSec = (parseInt(sParts[0], 10) * 3600) + (parseInt(sParts[1], 10) * 60);
+        var iParts = iftarStr.split(':');
+        var iftarSec = (parseInt(iParts[0], 10) * 3600) + (parseInt(iParts[1], 10) * 60);
 
-        let diff, msg;
+        var diff = 0;
+        var msg = "";
+        
         if (currentSec < sahriSec) {
-            diff = sahriSec - currentSec; msg = "সাহরীর শেষ সময়ের বাকি";
+            diff = sahriSec - currentSec; 
+            msg = "সাহরীর শেষ সময়ের বাকি";
         } else if (currentSec < iftarSec) {
-            diff = iftarSec - currentSec; msg = "ইফতারের বাকি";
+            diff = iftarSec - currentSec; 
+            msg = "ইফতারের বাকি";
         } else {
             if (idx + 1 < ramadanSchedule.length) {
-                const nextData = ramadanSchedule[idx + 1];
-                const nSahri = addMins(nextData.s, dist.s);
-                diff = (86400 - currentSec) + (parseInt(nSahri.split(':')[0]) * 3600) + (parseInt(nSahri.split(':')[1]) * 60);
+                var nextData = ramadanSchedule[idx + 1];
+                var nSahri = addMins(nextData.s, dist.s);
+                var nsParts = nSahri.split(':');
+                var nSahriSec = (parseInt(nsParts[0], 10) * 3600) + (parseInt(nsParts[1], 10) * 60);
+                diff = (86400 - currentSec) + nSahriSec;
                 msg = "আগামীকাল সাহরীর বাকি";
-            } else { diff = 0; msg = "মাহে রমজান সমাপ্ত"; }
+            } else { 
+                diff = 0; 
+                msg = "মাহে রমজান সমাপ্ত"; 
+            }
         }
 
         document.getElementById('statusMsg').innerText = msg;
         if (diff > 0) {
-            let h = Math.floor(diff / 3600);
-            let m = Math.floor((diff % 3600) / 60);
-            let s = diff % 60;
-            document.getElementById('timer').innerText = toBangla(String(h).padStart(2,'0')+":"+String(m).padStart(2,'0')+":"+String(s).padStart(2,'0'));
-        } else { document.getElementById('timer').innerText = toBangla("০০:০০:০০"); }
+            var hr = Math.floor(diff / 3600);
+            var mn = Math.floor((diff % 3600) / 60);
+            var sc = diff % 60;
+            document.getElementById('timer').innerText = toBangla(padZero(hr) + ":" + padZero(mn) + ":" + padZero(sc));
+        } else { 
+            document.getElementById('timer').innerText = toBangla("০০:০০:০০"); 
+        }
     }
 
-    setInterval(update, 1000); update();
+    setInterval(update, 1000); 
+    update();
 </script>
 </body>
 </html>
