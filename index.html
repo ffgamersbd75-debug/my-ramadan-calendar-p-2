@@ -4,163 +4,238 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ডিজিটাল রমজান ক্যালেন্ডার ২০২৬</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* সম্পূর্ণ নতুন থিম ও ব্যাকগ্রাউন্ড */
+        /* সম্পূর্ণ নতুন মডার্ন থিম */
         body { 
-            font-family: 'Hind Siliguri', sans-serif; 
-            background: #f0f4f1; /* সফট অফ-হোয়াইট ব্যাকগ্রাউন্ড */
+            font-family: 'Anek Bangla', 'Hind Siliguri', sans-serif; 
+            background-color: #f0f7f4; /* স্নিগ্ধ ব্যাকগ্রাউন্ড */
             margin: 0; 
             padding: 0; 
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* প্রিমিয়াম হেডার ডিজাইন */
-        .app-header {
-            background: linear-gradient(135deg, #0f5132 0%, #198754 100%);
-            padding: 30px 20px 50px 20px;
+        /* রমজান ভাইব হেডার (গাঢ় সবুজ ও সোনালী) */
+        .ramadan-header {
+            background: linear-gradient(135deg, #024b30 0%, #067d53 100%);
+            padding: 35px 20px 60px 20px;
             text-align: center;
-            color: white;
-            border-bottom-left-radius: 35px;
-            border-bottom-right-radius: 35px;
-            box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(2, 75, 48, 0.3);
         }
-        .app-header h1 { margin: 0; font-size: 1.8rem; color: #ffdb58; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
-        .app-header p { margin: 5px 0 0 0; font-size: 1rem; opacity: 0.9; }
+        
+        /* হেডারের ভেতরের ডেকোরেশন */
+        .ramadan-header::before {
+            content: '🌙';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 80px;
+            opacity: 0.15;
+            color: #ffd700;
+        }
+        .ramadan-header::after {
+            content: '✨';
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 40px;
+            opacity: 0.2;
+            color: #ffd700;
+        }
 
-        /* মূল কন্টেইনার (ভাসমান) */
-        .container {
-            max-width: 450px;
-            margin: -35px auto 20px auto;
+        .app-title {
+            color: #ffd700; /* সোনালী রঙ */
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .app-subtitle { color: #e8f5e9; font-size: 1.1rem; margin-top: 5px; font-weight: 500; opacity: 0.9; }
+
+        /* মূল কন্টেইনার */
+        .main-container {
+            max-width: 420px;
+            margin: -45px auto 30px auto;
             padding: 0 15px;
             position: relative;
+            z-index: 10;
         }
 
-        /* মডার্ন কার্ড ডিজাইন */
-        .card {
-            background: white;
-            border-radius: 18px;
+        /* আধুনিক ভাসমান কার্ড */
+        .modern-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-            margin-bottom: 15px;
-            border: 1px solid rgba(25, 135, 84, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         /* ড্রপডাউন ডিজাইন */
-        label { display: block; margin-bottom: 8px; color: #0f5132; font-weight: 700; font-size: 1.1rem; }
-        select { 
+        .district-label { display: block; margin-bottom: 10px; color: #024b30; font-weight: 700; font-size: 1.1rem; }
+        .modern-select { 
             width: 100%; 
-            padding: 14px; 
+            padding: 15px; 
             border-radius: 12px; 
-            border: 2px solid #c3e6cb; 
-            background: #f8fbf9; 
-            font-family: 'Hind Siliguri'; 
-            font-size: 1.1rem; 
-            color: #0f5132; 
+            border: 2px solid #a5d6a7; 
+            background-color: #f9fdfa; 
+            font-family: 'Anek Bangla'; 
+            font-size: 1.15rem; 
+            color: #024b30; 
             font-weight: 600;
             outline: none;
             box-sizing: border-box;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23024b30' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            transition: all 0.3s ease;
         }
-        select:focus { border-color: #198754; }
+        .modern-select:focus { border-color: #067d53; box-shadow: 0 0 0 3px rgba(6, 125, 83, 0.2); }
 
-        /* ব্যাজ (তারিখ ও রমজান) */
-        .badge-container { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 15px; }
-        .badge {
+        /* তারিখ ও রমজানের স্পেশাল ব্যাজ */
+        .info-badges { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
+        .badge-item {
             background: #e8f5e9;
-            color: #198754;
-            padding: 10px 15px;
-            border-radius: 25px;
+            color: #067d53;
+            padding: 12px 10px;
+            border-radius: 14px;
             font-weight: 700;
             font-size: 1.1rem;
             text-align: center;
             flex: 1;
-            border: 1px solid #c3e6cb;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            border: 1px solid #c8e6c9;
         }
+        .badge-item span { display: block; font-size: 0.85rem; color: #666; font-weight: 500; margin-bottom: 3px; }
 
-        /* সময়সূচি গ্রিড */
-        .time-grid { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 15px; }
+        /* সময়সূচি বক্স (সাহরী ও ইফতার) */
+        .times-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
         .time-box {
-            background: linear-gradient(to bottom, #ffffff, #f9fbf9);
-            border: 2px solid #e2f0e6;
-            border-radius: 16px;
-            padding: 18px 10px;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 20px 10px;
             flex: 1;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             position: relative;
             overflow: hidden;
+            border: 1px solid #eef5f0;
         }
-        .time-box::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #198754;
-        }
-        .time-label { color: #6c757d; font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
-        .time-val { color: #0f5132; font-size: 2.2rem; font-weight: 700; }
+        /* বক্সের উপরের রঙিন বর্ডার */
+        .time-box.sahri::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #0ea5e9; }
+        .time-box.iftar::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #f59e0b; }
+        
+        .t-label { color: #64748b; font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+        .t-time { color: #0f172a; font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; }
 
-        /* প্রিমিয়াম টাইমার কার্ড */
-        .timer-card {
-            background: linear-gradient(135deg, #0f5132 0%, #146c43 100%);
-            color: white;
+        /* আকর্ষণীয় কাউন্টডাউন টাইমার (এনিমেশন সহ) */
+        .countdown-wrapper {
+            background: linear-gradient(135deg, #024b30 0%, #046340 100%);
             border-radius: 20px;
             padding: 25px 15px;
             text-align: center;
+            color: white;
+            box-shadow: 0 12px 30px rgba(2, 75, 48, 0.4);
+            margin-bottom: 20px;
+            border: 2px solid rgba(255,215,0,0.2);
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(15, 81, 50, 0.3);
-            margin-bottom: 15px;
         }
-        .timer-label { font-size: 1.2rem; font-weight: 500; opacity: 0.9; margin-bottom: 5px; }
-        .timer-val { font-size: 3rem; font-weight: 700; font-family: monospace; color: #ffdb58; text-shadow: 0 2px 4px rgba(0,0,0,0.4); letter-spacing: 2px; }
+        /* টাইমারের ব্যাকগ্রাউন্ড গ্লো */
+        .countdown-wrapper::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 4s infinite linear;
+        }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.5; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.5; } }
 
-        /* ফুটার লোগো সেকশন */
-        .footer-card { text-align: center; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; }
-        .association-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid #198754; padding: 3px; margin-bottom: 12px; object-fit: cover; }
-        .association-name { font-size: 1.25rem; color: #0f5132; font-weight: 700; line-height: 1.4; }
-        .source-text { font-size: 0.85rem; color: #888; margin-top: 10px; font-weight: 500; }
+        .cd-msg { font-size: 1.25rem; font-weight: 600; color: #a7f3d0; margin-bottom: 8px; position: relative; z-index: 2; }
+        .cd-timer { 
+            font-size: 3.2rem; 
+            font-weight: 800; 
+            font-family: monospace; 
+            color: #ffd700; 
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); 
+            letter-spacing: 2px;
+            position: relative; z-index: 2;
+        }
+
+        /* ফুটার ও লোগো সেকশন */
+        .org-footer {
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .org-logo { 
+            width: 85px; height: 85px; 
+            border-radius: 50%; 
+            border: 3px solid #067d53; 
+            padding: 4px; 
+            margin-bottom: 12px; 
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        .org-name { font-size: 1.3rem; color: #024b30; font-weight: 800; line-height: 1.4; }
+        .org-source { font-size: 0.9rem; color: #64748b; margin-top: 10px; font-weight: 500; }
     </style>
 </head>
 <body>
 
-<div class="app-header">
-    <h1 id="districtTitle">🌙 সময়সূচী</h1>
-    <p>ডিজিটাল রমজান ক্যালেন্ডার ২০২৬</p>
+<div class="ramadan-header">
+    <h1 class="app-title">মাহে রমজান ২০২৬</h1>
+    <p class="app-subtitle">রহমত, মাগফিরাত ও নাজাতের মাস</p>
 </div>
 
-<div class="container">
-    <div class="card">
-        <label for="districtSelect">📍 আপনার জেলা নির্বাচন করুন:</label>
-        <select id="districtSelect" onchange="changeDistrict()"></select>
+<div class="main-container">
+    <div class="modern-card">
+        <label for="districtSelect" class="district-label">📍 জেলা নির্বাচন করুন</label>
+        <select id="districtSelect" class="modern-select" onchange="changeDistrict()"></select>
     </div>
 
-    <div class="badge-container">
-        <div class="badge" id="displayDate">--</div>
-        <div class="badge" id="ramadanNo">-- রমজান</div>
-    </div>
-
-    <div class="time-grid">
-        <div class="time-box">
-            <div class="time-label">সাহরীর শেষ সময়</div>
-            <div class="time-val" id="sahriTime">--:--</div>
+    <div class="info-badges">
+        <div class="badge-item">
+            <span>আজকের তারিখ</span>
+            <div id="displayDate">--</div>
         </div>
-        <div class="time-box">
-            <div class="time-label">ইফতার</div>
-            <div class="time-val" id="iftarTime">--:--</div>
+        <div class="badge-item" style="background: #fff8e1; color: #b45309; border-color: #fef08a;">
+            <span>পবিত্র রমজান</span>
+            <div id="ramadanNo">-- রমজান</div>
         </div>
     </div>
 
-    <div class="timer-card">
-        <div class="timer-label" id="statusMsg">অপেক্ষা করুন...</div>
-        <div class="timer-val" id="timer">০০:০০:০০</div>
+    <div class="times-container">
+        <div class="time-box sahri">
+            <div class="t-label">সাহরীর শেষ সময়</div>
+            <div class="t-time" id="sahriTime">--:--</div>
+        </div>
+        <div class="time-box iftar">
+            <div class="t-label">ইফতারের সময়</div>
+            <div class="t-time" id="iftarTime">--:--</div>
+        </div>
     </div>
 
-    <div class="card footer-card">
-        <img src="logo.jpg.png" alt="Logo" class="association-logo">
-        <div class="association-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস অ্যাসোসিয়েশন, বরিশাল</div>
-        <div class="source-text">সোর্স: ইসলামিক ফাউন্ডেশন</div>
+    <div class="countdown-wrapper">
+        <div class="cd-msg" id="statusMsg">অপেক্ষা করুন...</div>
+        <div class="cd-timer" id="timer">০০:০০:০০</div>
+    </div>
+
+    <div class="modern-card org-footer">
+        <img src="logo.jpg.png" alt="Logo" class="org-logo">
+        <div class="org-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস অ্যাসোসিয়েশন, বরিশাল</div>
+        <div class="org-source">তথ্যসূত্র: ইসলামিক ফাউন্ডেশন, বাংলাদেশ</div>
     </div>
 </div>
 
 <script>
-    // জাভাস্ক্রিপ্ট লজিক আগেরটাই ব্যবহার করা হয়েছে (যেহেতু এটি ১০০% কাজ করছে)
+    // আপনার আগের ১০০% কাজ করা লজিক (ES5) হুবহু নিচে দেওয়া হলো
     var ramadanSchedule = [
         { d: "2026-02-19", s: "05:07", i: "17:56" }, { d: "2026-02-20", s: "05:06", i: "17:57" },
         { d: "2026-02-21", s: "05:05", i: "17:57" }, { d: "2026-02-22", s: "05:04", i: "17:58" },
@@ -215,9 +290,7 @@
         return bnStr;
     }
 
-    function padZero(num) {
-        return num < 10 ? "0" + num : num;
-    }
+    function padZero(num) { return num < 10 ? "0" + num : num; }
 
     var select = document.getElementById('districtSelect');
     for(var i=0; i<districtData.length; i++) {
@@ -228,9 +301,7 @@
     }
 
     var currentDist = "পটুয়াখালী";
-    try {
-        if(localStorage.getItem('userDistrict')) { currentDist = localStorage.getItem('userDistrict'); }
-    } catch(e) {}
+    try { if(localStorage.getItem('userDistrict')) { currentDist = localStorage.getItem('userDistrict'); } } catch(e) {}
     select.value = currentDist;
 
     function changeDistrict() {
@@ -280,7 +351,6 @@
             } else { 
                 document.getElementById('ramadanNo').innerText = "ঈদ মোবারক";
                 document.getElementById('displayDate').innerText = "--";
-                document.getElementById('districtTitle').innerText = "🌙 " + currentDist;
                 document.getElementById('sahriTime').innerText = "--:--";
                 document.getElementById('iftarTime').innerText = "--:--";
                 document.getElementById('statusMsg').innerText = "মাহে রমজান সমাপ্ত।";
@@ -299,13 +369,9 @@
         var iftarSec = (parseInt(iParts[0], 10) * 3600) + (parseInt(iParts[1], 10) * 60);
 
         if (currentSec < sahriSec) {
-            activeIdx = idx;
-            diff = sahriSec - currentSec; 
-            msg = "সাহরীর শেষ সময়ের বাকি";
+            activeIdx = idx; diff = sahriSec - currentSec; msg = "সাহরীর শেষ সময়ের বাকি";
         } else if (currentSec < iftarSec) {
-            activeIdx = idx;
-            diff = iftarSec - currentSec; 
-            msg = "ইফতারের বাকি";
+            activeIdx = idx; diff = iftarSec - currentSec; msg = "ইফতারের বাকি";
         } else {
             if (idx + 1 < ramadanSchedule.length) {
                 activeIdx = idx + 1;
@@ -332,7 +398,6 @@
         
         document.getElementById('displayDate').innerText = toBangla(dateParts[2]) + monthName;
         document.getElementById('ramadanNo').innerText = toBangla(activeIdx + 1) + " রমজান";
-        document.getElementById('districtTitle').innerText = "🌙 " + currentDist;
         document.getElementById('sahriTime').innerText = toBangla(dSahriStr);
         
         var dIftarParts = dIftarStr.split(':');
