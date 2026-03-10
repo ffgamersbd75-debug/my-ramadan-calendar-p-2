@@ -85,7 +85,6 @@
         .t-label { color: #64748b; font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
         .t-time { color: #0f172a; font-size: 2.4rem; font-weight: 800; letter-spacing: -1px; }
 
-        /* চোখে আরামদায়ক প্রিমিয়াম টাইমার */
         .countdown-wrapper {
             background: linear-gradient(135deg, #065f46 0%, #047857 100%);
             border-radius: 20px;
@@ -97,13 +96,61 @@
         }
         .cd-msg { font-size: 1.15rem; font-weight: 600; color: #a7f3d0; margin-bottom: 8px; }
         .cd-timer { 
-            font-size: 3rem; 
+            font-size: 3.2rem; 
             font-weight: 800; 
             font-family: monospace; 
             color: #ffffff; 
             text-shadow: 0 2px 10px rgba(0,0,0,0.2); 
             letter-spacing: 2px;
         }
+
+        /* দোয়া সেকশন স্টাইলিং */
+        .dua-header {
+            text-align: center;
+            color: #067d53;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #c8e6c9;
+        }
+        .dua-box {
+            background: #f9fdfa;
+            border: 1px solid #eef5f0;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .dua-box:last-child { margin-bottom: 0; }
+        .dua-title-badge {
+            background: #024b30;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .arabic-text {
+            font-family: 'Amiri', 'Traditional Arabic', serif;
+            font-size: 1.5rem;
+            text-align: right;
+            color: #0f172a;
+            direction: rtl;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .bangla-text {
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 5px;
+            text-align: justify;
+        }
+        .bangla-text strong { color: #067d53; }
 
         .org-footer { text-align: center; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .org-logo { 
@@ -152,6 +199,24 @@
     <div class="countdown-wrapper">
         <div class="cd-msg" id="statusMsg">অপেক্ষা করুন...</div>
         <div class="cd-timer" id="timer">০০:০০:০০</div>
+    </div>
+
+    <div class="modern-card">
+        <h3 class="dua-header">রমজানের প্রয়োজনীয় দোয়া</h3>
+        
+        <div class="dua-box">
+            <div class="dua-title-badge">সাহরীর নিয়ত</div>
+            <div class="arabic-text">نَوَيْتُ اَنْ اُصُوْمَ غَدًا مِّنْ شَهْرِ رَمْضَانَ الْمُبَارَكِ فَرْضَا لَكَ يَا اللهُ فَتَقَبَّل مِنِّى اِنَّكَ اَنْتَ السَّمِيْعُ الْعَلِيْم</div>
+            <div class="bangla-text"><strong>উচ্চারণ:</strong> নাওয়াইতু আন আছুমা গাদাম, মিন শাহরি রমাদানাল মুবারকি ফারদাল্লাকা ইয়া আল্লাহু, ফাতাকাব্বাল মিন্নি ইন্নাকা আংতাস সামিউল আলিম।</div>
+            <div class="bangla-text"><strong>অর্থ:</strong> হে আল্লাহ! আমি আগামীকাল পবিত্র রমজানের তোমার পক্ষ থেকে নির্ধারিত ফরজ রোজা রাখার নিয়ত করলাম। অতএব তুমি আমার পক্ষ থেকে কবুল কর, নিশ্চয়ই তুমি সর্বশ্রোতা ও সর্বজ্ঞ।</div>
+        </div>
+
+        <div class="dua-box">
+            <div class="dua-title-badge" style="background: #b45309;">ইফতারের দোয়া</div>
+            <div class="arabic-text">اَللَّهُمَّ لَكَ صُمْتُ وَ عَلَى رِزْقِكَ اَفْطَرْتُ</div>
+            <div class="bangla-text"><strong>উচ্চারণ:</strong> আল্লাহুম্মা লাকা ছুমতু ওয়া আলা রিযক্বিকা আফতারতু।</div>
+            <div class="bangla-text"><strong>অর্থ:</strong> হে আল্লাহ! আমি তোমারই সন্তুষ্টির জন্য রোজা রেখেছি এবং তোমারই দেয়া রিজিকের মাধ্যমে ইফতার করছি।</div>
+        </div>
     </div>
 
     <div class="modern-card org-footer">
@@ -318,7 +383,6 @@
             }
         }
 
-        // ডাইনামিক তারিখের লেবেল পরিবর্তন
         document.getElementById('dateLabelTitle').innerText = isNextDay ? "আগামীকালের তারিখ" : "আজকের তারিখ";
 
         var displayData = ramadanSchedule[activeIdx];
